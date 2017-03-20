@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.app.travelassist.MainActivity">
-
+    tools:context="com.app.travelassist.ui.MainActivity">
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shops_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:paddingTop="4dp" />
     <ProgressBar
         android:id="@+id/loading"
@@ -24,5 +27,6 @@
         android:text="No shops available"
         android:textSize="40sp"
         android:visibility="gone" />
+    </FrameLayout>
 
 </RelativeLayout>
