@@ -38,9 +38,13 @@ public class ShopProvider extends ContentProvider {
         String SHOP_NAME = "shop_name";
         String SHOP_TYPE = "shop_type";
         String SHOP_CUISINE = "shop_cuisine";
+        String SHOP_LATITUDE = "shop_lat";
+        String SHOP_LONGITUDE = "shop_long";
         String SHOP_DISTANCE = "shop_distance";
         String SHOP_RATING = "shop_rating";
         String SHOP_STATUS = "shop_status";
+        String SHOP_ADDRESS = "shop_address";
+        String SHOP_MOBILE = "shop_mobile";
     }
 
     public interface MENU_ITEM_COLUMNS {
@@ -56,7 +60,8 @@ public class ShopProvider extends ContentProvider {
             + TABLE_SHOP + "("
             + SHOP_COLUMNS.SHOP_ID + " TEXT PRIMARY KEY ," + SHOP_COLUMNS.SHOP_NAME + " TEXT," +
             SHOP_COLUMNS.SHOP_TYPE + " TEXT," + SHOP_COLUMNS.SHOP_CUISINE + " TEXT," + SHOP_COLUMNS.SHOP_RATING + " TEXT," +
-            SHOP_COLUMNS.SHOP_STATUS + " TEXT," + SHOP_COLUMNS.SHOP_DISTANCE + " INTEGER)";
+            SHOP_COLUMNS.SHOP_LATITUDE + " TEXT," + SHOP_COLUMNS.SHOP_LONGITUDE + " TEXT," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," +
+            SHOP_COLUMNS.SHOP_MOBILE + " TEXT,"+SHOP_COLUMNS.SHOP_STATUS + " TEXT," + SHOP_COLUMNS.SHOP_DISTANCE + " INTEGER)";
 
     private static final String CREATE_MENU_ITEM_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_MENU_ITEM + "("

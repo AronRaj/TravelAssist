@@ -35,6 +35,7 @@ public class HotelFragment extends Fragment {
     private RatingBar hotelRating;
     private TextView hotelName;
     private TextView hotelCuisine;
+    private TextView hotelMapText;
     private ListView hotelMenuList;
 
     List<String> list;
@@ -75,6 +76,19 @@ public class HotelFragment extends Fragment {
         hotelImage = (ImageView) mRootView.findViewById(R.id.hotel_image);
         hotelName = (TextView) mRootView.findViewById(R.id.hotel_name);
         hotelCuisine = (TextView) mRootView.findViewById(R.id.hotel_cuisine);
+        hotelMapText = (TextView) mRootView.findViewById(R.id.hotel_map_text);
+        hotelMapText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new MapViewFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);
+                fragmentTransaction.replace(R.id.hotel_menu, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         hotelRating = (RatingBar) mRootView.findViewById(R.id.hotel_rating);
         hotelMenuList = (ListView) mRootView.findViewById(R.id.hotel_menu_list);
         populateShopData();

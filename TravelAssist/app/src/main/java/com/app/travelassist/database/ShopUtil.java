@@ -96,6 +96,10 @@ public class ShopUtil {
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_DISTANCE, shop.getDistance());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_RATING, shop.getShopRating());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_STATUS, shop.getShopStatus());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE, shop.getShopLatitude());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE, shop.getShopLongitude());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE, shop.getShopMobile());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_ADDRESS, shop.getShopAddress());
             /*int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, null, null);
                 Log.d(TAG, "insertOrUpdateRouteInfo() :: CONTENT_URI_LOCATION_INFO_TABLE rows count " + count);
             if (count == 0) {*/

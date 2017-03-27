@@ -76,6 +76,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
                 android:text="Map View"
+                android:clickable="true"
                 android:textSize="20sp" />
 
             <TextView
