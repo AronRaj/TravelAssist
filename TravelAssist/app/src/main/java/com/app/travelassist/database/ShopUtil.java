@@ -4,8 +4,10 @@ package com.app.travelassist.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
+
 
 import com.app.travelassist.model.MenuItem;
 import com.app.travelassist.model.ShopDetail;
@@ -150,6 +152,75 @@ public class ShopUtil {
             itemsList.add(lCursor.getString(lCursor.getColumnIndex(ShopProvider.MENU_ITEM_COLUMNS.ITEM_NAME)));
         }
         return itemsList;
+    }
+
+    public static List<ShopDetail> getAllUnprocessedLocation(){
+        Cursor lCursor = null;
+        List<ShopDetail> shopLocationList=new ArrayList<>();
+        String selection = ShopProvider.SHOP_COLUMNS.SHOP_INFO_PROCESSED + " = ?";
+        String[] selectionArg = new String[]{""+ShopProvider.SHOP_COLUMNS.SHOP_LOCATION_UN_PROCESSED};
+
+        lCursor = ShopApplication.getShopContext().getContentResolver().query(ShopProvider.CONTENT_URI_MENU_ITEM_TABLE, null, selection, selectionArg, null);
+        while (null!=lCursor&&lCursor.moveToNext()){
+            ShopDetail lLocation=new ShopDetail();
+            lLocation.setShopId(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_ID)));
+            lLocation.setShopLatitude(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE)));
+            lLocation.setShopLongitude(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE)));
+            shopLocationList.add(lLocation);
+        }
+        return shopLocationList;
+    }
+
+    public static void updateAllShopDistance(List<ShopDetail> locationDetail){
+        List<ShopDetail> list=locationDetail;
+        for(ShopDetail item:list){
+            String lSelection = ShopProvider.SHOP_COLUMNS.SHOP_ID + "= ?";
+            String[] lSelectionArg = {item.getShopId()};
+            ContentValues lValue = new ContentValues();
+            lValue.put(ShopProvider.SHOP_COLUMNS.SHOP_DISTANCE, item.getDistance());
+            lValue.put(ShopProvider.SHOP_COLUMNS.SHOP_INFO_PROCESSED, ShopProvider.SHOP_COLUMNS.SHOP_LOCATION_PROCESSED);
+            int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lValue, lSelection, lSelectionArg);
+            Log.d(TAG, "updateAllShopDistance() :: update count " + count);
+        }
+    }
+
+    public static double getDistance(double currentLat,double currentLong,double hotelLat,double hotelLong){
+        Location startPoint=new Location("current");
+        startPoint.setLatitude(currentLat);
+        startPoint.setLongitude(currentLong);
+
+        Location endPoint=new Location("hotel");
+        endPoint.setLatitude(hotelLat);
+        endPoint.setLongitude(hotelLong);
+
+        double distance=startPoint.distanceTo(endPoint);
+        Log.d(TAG, "getDistance() :: distance to shop " + distance);
+        return distance;
+    }
+
+    public static Location getCurrentLocationFromDB(){
+        Cursor lCursor = null;
+        Location location=new Location("current");
+
+        lCursor = ShopApplication.getShopContext().getContentResolver().query(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, null, null, null, null);
+        while (null!=lCursor&&lCursor.moveToNext()){
+            location.setLatitude((lCursor.getInt(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE))));
+            location.setLongitude((lCursor.getInt(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE))));
+        }
+        Log.d(TAG, "getCurrentLocationFromDB() :: location " + location.getLatitude()+"--"+location.getLongitude());
+        return location;
+    }
+
+    public static void updateCurrentLocation(Location location){
+        ContentValues lValue = new ContentValues();
+        lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE, location.getLatitude());
+        lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE, location.getLongitude());
+        int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, lValue, null, null);
+        Log.d(TAG, "updateCurrentLocation() :: count " + count);
+        if(count==0){
+          Uri lUri=  ShopApplication.getShopContext().getContentResolver().insert(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE,lValue);
+            Log.d(TAG, "updateCurrentLocation() :: Uri " + lUri);
+        }
     }
 
 }

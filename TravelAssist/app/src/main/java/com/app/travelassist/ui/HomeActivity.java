@@ -1,6 +1,7 @@
 package com.app.travelassist.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,10 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.travelassist.R;
+import com.app.travelassist.database.ShopProvider;
 import com.app.travelassist.model.MenuItem;
+import com.app.travelassist.util.LocationManager;
 import com.app.travelassist.util.ShopListAdapter;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.database.ShopUtil;
+import com.app.travelassist.volley.VolleyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +47,13 @@ public class HomeActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         moviesRecyclerView.setLayoutManager(llm);
         shopsList = new ArrayList<ShopDetail>();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, LocationManager.class);
+        startService(intent);
         putDummyData();
         putDummyItems();
         checkForPermission();
@@ -101,7 +112,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void putDummyData(){
-        List<ShopDetail> list=new ArrayList<>();
+        VolleyUtil.getShopsWithLatLng(12.9913,77.6874,"restaurant","500");
+        /*List<ShopDetail> list=new ArrayList<>();
         ShopDetail shop1=new ShopDetail();
         shop1.setShopId("S001");
         shop1.setShopName("A2B");
@@ -207,7 +219,7 @@ public class HomeActivity extends AppCompatActivity {
         list.add(shop6);
         list.add(shop7);
         list.add(shop8);
-        ShopUtil.addShopsList(list);
+        ShopUtil.addShopsList(list);*/
     }
 
     private void putDummyItems(){

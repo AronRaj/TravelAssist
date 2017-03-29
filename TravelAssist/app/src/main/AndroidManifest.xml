@@ -27,6 +27,10 @@
     </activity>
     <activity android:name=".ui.MainActivity"></activity>
 
+    <service
+        android:name=".util.LocationManager"
+        android:exported="false"/>
+
     <provider android:name="com.app.travelassist.database.ShopProvider"
         android:authorities="com.app.travelassist.database.ShopProvider" />
 </application>
