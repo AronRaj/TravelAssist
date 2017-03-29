@@ -36,6 +36,7 @@ public class HotelFragment extends Fragment {
     private TextView hotelName;
     private TextView hotelCuisine;
     private TextView hotelMapText;
+    private TextView hotelInfoText;
     private ListView hotelMenuList;
 
     List<String> list;
@@ -81,6 +82,19 @@ public class HotelFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new MapViewFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);
+                fragmentTransaction.replace(R.id.hotel_menu, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+        hotelInfoText = (TextView) mRootView.findViewById(R.id.hotel_info_text);
+        hotelInfoText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = HotelInfoFragment.newInstance("");
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);
