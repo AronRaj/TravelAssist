@@ -52,11 +52,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        checkForPermission();
         Intent intent = new Intent(this, LocationManager.class);
         startService(intent);
         putDummyData();
         putDummyItems();
-        checkForPermission();
         new LoadDataAsync().execute();
     }
 

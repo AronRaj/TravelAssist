@@ -1,12 +1,15 @@
 package com.app.travelassist.util;
 
+import android.Manifest;
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -26,7 +29,7 @@ import java.util.Locale;
  * Created by aarokiax on 2/13/2017.
  */
 
-public class LocationManager extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
+public class LocationManager extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final String TAG = "LocationManager";
 
     private GoogleApiClient mGoogleApiClient;
@@ -50,15 +53,15 @@ public class LocationManager extends IntentService implements GoogleApiClient.Co
     }
 
 
-
     protected void getLocation() {
-        if(null==mLocationRequest){
+        if (null == mLocationRequest) {
             configureLocationRequest();
         }
         //checkForPermission();
         if (mGoogleApiClient.isConnected()) {
-            /*LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,mLocationRequest,this);
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);*/
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            ShopUtil.updateCurrentLocation(mLastLocation);
             //getAddressInfo(mLastLocation);
             //getDistanceInfo(mLastLocation);
 
@@ -88,8 +91,8 @@ public class LocationManager extends IntentService implements GoogleApiClient.Co
                 .build();
     }
 
-    protected synchronized void configureLocationRequest(){
-        mLocationRequest=new LocationRequest();
+    protected synchronized void configureLocationRequest() {
+        mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(ShopInterface.LOCATION_INTERVAL);
         mLocationRequest.setFastestInterval(ShopInterface.FASTEST_INTERVAL);
         mLocationRequest.setSmallestDisplacement(ShopInterface.MINIMUM_DISPLACEMENT);
@@ -114,7 +117,7 @@ public class LocationManager extends IntentService implements GoogleApiClient.Co
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d(TAG,"onLocationChanged :: "+location.toString());
+        Log.d(TAG, "onLocationChanged :: " + location.toString());
         ShopUtil.updateCurrentLocation(location);
     }
 
@@ -164,7 +167,7 @@ public class LocationManager extends IntentService implements GoogleApiClient.Co
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.d(TAG,"Got intent to start Location manager");
+        Log.d(TAG, "Got intent to start Location manager");
         getCurrentLocation();
     }
 }

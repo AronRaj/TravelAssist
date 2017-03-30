@@ -13,6 +13,7 @@ import com.app.travelassist.model.MenuItem;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.app.ShopApplication;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class ShopUtil {
             shopInfo.setShopName((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_NAME))));
             shopInfo.setShopCuisine((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_CUISINE))));
             shopInfo.setShopRating((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_RATING))));
+            shopInfo.setShopLatitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE))));
+            shopInfo.setShopLongitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE))));
         }
         return shopInfo;
     }
@@ -90,6 +93,8 @@ public class ShopUtil {
     public static void addShopsList(List<ShopDetail> shopsList){
         List<ShopDetail> list=shopsList;
         for(ShopDetail shop:shopsList){
+            String lSelection = ShopProvider.SHOP_COLUMNS.SHOP_ID + "= ?";
+            String[] lSelectionArg = {shop.getShopId()};
             ContentValues lShopContentValue = new ContentValues();
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_ID, shop.getShopId());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_NAME, shop.getShopName());
@@ -102,11 +107,11 @@ public class ShopUtil {
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE, shop.getShopLongitude());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE, shop.getShopMobile());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_ADDRESS, shop.getShopAddress());
-            /*int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, null, null);
-                Log.d(TAG, "insertOrUpdateRouteInfo() :: CONTENT_URI_LOCATION_INFO_TABLE rows count " + count);
-            if (count == 0) {*/
+            int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, lSelection, lSelectionArg);
+                Log.d(TAG, "addShopsList() :: CONTENT_URI_SHOP_TABLE rows count " + count);
+            if (count == 0) {
                 Uri lUri = ShopApplication.getShopContext().getContentResolver().insert(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue);
-            //}
+            }
         }
     }
 
@@ -119,8 +124,8 @@ public class ShopUtil {
             lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_PRICE, item.getItemPrice());
             lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_CATEGORY, item.getItemCategory());
             lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.SHOP_ID, item.getShopId());
-            /*int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, null, null);
-                Log.d(TAG, "insertOrUpdateRouteInfo() :: CONTENT_URI_LOCATION_INFO_TABLE rows count " + count);
+            /*int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lItemContentValue, null, null);
+                Log.d(TAG, "addItemsList() :: CONTENT_URI_SHOP_TABLE rows count " + count);
             if (count == 0) {*/
             Uri lUri = ShopApplication.getShopContext().getContentResolver().insert(ShopProvider.CONTENT_URI_MENU_ITEM_TABLE, lItemContentValue);
             //}
@@ -164,8 +169,8 @@ public class ShopUtil {
         while (null!=lCursor&&lCursor.moveToNext()){
             ShopDetail lLocation=new ShopDetail();
             lLocation.setShopId(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_ID)));
-            lLocation.setShopLatitude(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE)));
-            lLocation.setShopLongitude(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE)));
+            lLocation.setShopLatitude(lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE)));
+            lLocation.setShopLongitude(lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE)));
             shopLocationList.add(lLocation);
         }
         return shopLocationList;
@@ -185,6 +190,7 @@ public class ShopUtil {
     }
 
     public static double getDistance(double currentLat,double currentLong,double hotelLat,double hotelLong){
+        double distanceInKm=0.0;
         Location startPoint=new Location("current");
         startPoint.setLatitude(currentLat);
         startPoint.setLongitude(currentLong);
@@ -194,8 +200,13 @@ public class ShopUtil {
         endPoint.setLongitude(hotelLong);
 
         double distance=startPoint.distanceTo(endPoint);
-        Log.d(TAG, "getDistance() :: distance to shop " + distance);
-        return distance;
+        if(0!=distance) {
+            distanceInKm = distance / 1000;
+            DecimalFormat df = new DecimalFormat("#.##");
+            distanceInKm = Double.valueOf(df.format(distanceInKm));
+        }
+        Log.d(TAG, "getDistance() :: distance to shop " + distanceInKm+" KM");
+        return distanceInKm;
     }
 
     public static Location getCurrentLocationFromDB(){
@@ -204,8 +215,8 @@ public class ShopUtil {
 
         lCursor = ShopApplication.getShopContext().getContentResolver().query(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, null, null, null, null);
         while (null!=lCursor&&lCursor.moveToNext()){
-            location.setLatitude((lCursor.getInt(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE))));
-            location.setLongitude((lCursor.getInt(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE))));
+            location.setLatitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE))));
+            location.setLongitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE))));
         }
         Log.d(TAG, "getCurrentLocationFromDB() :: location " + location.getLatitude()+"--"+location.getLongitude());
         return location;

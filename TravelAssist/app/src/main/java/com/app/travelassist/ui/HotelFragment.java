@@ -81,7 +81,7 @@ public class HotelFragment extends Fragment {
         hotelMapText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new MapViewFragment();
+                Fragment fragment = MapViewFragment.newInstance(shopId);
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);

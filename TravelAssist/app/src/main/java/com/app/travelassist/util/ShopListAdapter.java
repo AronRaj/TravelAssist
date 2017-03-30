@@ -87,7 +87,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.Simple
         holder.shopName.setText(mData.get(position).getShopName());
         holder.shopType.setText("Type : "+mData.get(position).getShopType());
         holder.shopCuisine.setText(mData.get(position).getShopCuisine());
-        holder.shopDistance.setText(String.valueOf(mData.get(position).getDistance()));
+        holder.shopDistance.setText(String.valueOf(mData.get(position).getDistance())+" Km");
         holder.shopRating.setRating(Float.parseFloat(mData.get(position).getShopRating()));
         holder.shopStatus.setText("Status : "+mData.get(position).getShopStatus());
     }

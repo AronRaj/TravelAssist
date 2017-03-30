@@ -67,8 +67,8 @@ public class ShopHandler extends Handler {
                                 String longitude=result.getGeometry().getLocation().getLng();
                                 double hotelLat=Double.parseDouble(lat);
                                 double hotelLong=Double.parseDouble(longitude);
-                                shop.setShopLatitude(lat);
-                                shop.setShopLongitude(longitude);
+                                shop.setShopLatitude(hotelLat);
+                                shop.setShopLongitude(hotelLong);
                                 double distance=ShopUtil.getDistance(currentLocation.getLatitude(),currentLocation.getLongitude(),hotelLat,hotelLong);
                                 shop.setDistance(distance);
                                 shop.setShopAddress(result.getVicinity());

@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.app.travelassist.R;
+import com.app.travelassist.database.ShopUtil;
+import com.app.travelassist.model.ShopDetail;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,8 +26,36 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapViewFragment extends Fragment {
 
+    private static final String SHOP_ID = "shopid";
+    private String shopId;
+    private double shopLatitude;
+    private double shopLongitude;
+    private String shopName;
+
     MapView mMapView;
     private GoogleMap googleMap;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            shopId = getArguments().getString(SHOP_ID);
+            if(null!=shopId) {
+                ShopDetail data=ShopUtil.getShopInfo(shopId);
+                this.shopLatitude=data.getShopLatitude();
+                this.shopLongitude=data.getShopLongitude();
+                this.shopName=data.getShopName();
+            }
+        }
+    }
+
+    public static MapViewFragment newInstance(String shopId) {
+        MapViewFragment fragment = new MapViewFragment();
+        Bundle args = new Bundle();
+        args.putString(SHOP_ID, shopId);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,12 +91,12 @@ public class MapViewFragment extends Fragment {
                 googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                LatLng sydney = new LatLng(shopLatitude, shopLongitude);
+                googleMap.addMarker(new MarkerOptions().position(sydney).title(shopName).snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
-                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(19).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });
 

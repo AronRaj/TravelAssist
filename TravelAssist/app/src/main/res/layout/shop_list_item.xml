@@ -13,11 +13,11 @@
         card_view:contentPadding="10dp"
         card_view:cardElevation="5dp"
         card_view:cardBackgroundColor="@color/color_white">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,82 +25,98 @@
 
         <ImageView
             android:id="@+id/shopicon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="5dp"
             android:src="@mipmap/ic_free_breakfast" />
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/shop_name"
-                android:text="Hotel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/shop_name_color"
-                android:layout_marginTop="5dp"
-                android:textSize="15sp" />
-            <TextView
-                android:id="@+id/shop_cuisine"
-                android:text="South-Indian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/shop_name_color"
-                android:layout_marginTop="5dp"
-                android:textSize="10sp" />
-            <TextView
-                android:id="@+id/shop_distance"
-                android:text="Distance : 5 km"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/shop_name_color"
-                android:layout_marginTop="3dp"
-                android:textSize="10sp" />
 
-        </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/shop_type"
-                android:text="Type : Restaurant"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/shop_name_color"
-                android:layout_marginTop="5dp"
-                android:textSize="12sp" />
-            <RatingBar
-                android:id="@+id/shop_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                style="?android:attr/ratingBarStyleSmall"
-                android:theme="@style/RatingBar"
-                android:numStars="5"
-                android:rating="2.5"
-                android:stepSize="0.1"
-                android:layout_marginTop="2dp" />
-            <TextView
-                android:id="@+id/shop_status"
-                android:text="Status : Open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/shop_name_color"
-                android:layout_marginTop="5dp"
-                android:textSize="10sp" />
+            android:weightSum="2">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/shop_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Hotel"
+                    android:textColor="@color/shop_name_color"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/shop_cuisine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="South-Indian"
+                    android:textColor="@color/shop_name_color"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/shop_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Distance : 5 km"
+                    android:textColor="@color/shop_name_color"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/shop_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Type : Restaurant"
+                    android:textColor="@color/shop_name_color"
+                    android:textSize="12sp" />
+
+                <RatingBar
+                    android:id="@+id/shop_rating"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:theme="@style/RatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:rating="2.5"
+                    android:stepSize="0.1" />
+
+                <TextView
+                    android:id="@+id/shop_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Status : Open"
+                    android:textColor="@color/shop_name_color"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="5dp"
             android:background="#E0E0E0"/>
-        </LinearLayout>
+    </LinearLayout>
     </android.support.v7.widget.CardView>
-
 </RelativeLayout>

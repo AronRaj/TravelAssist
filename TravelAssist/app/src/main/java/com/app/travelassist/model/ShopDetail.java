@@ -10,8 +10,8 @@ public class ShopDetail {
     private String shopType;
     private String shopCuisine;
     private double distance;
-    private String shopLatitude;
-    private String shopLongitude;
+    private double shopLatitude;
+    private double shopLongitude;
     private String shopAddress;
     private String shopMobile;
     private String shopRating;
@@ -57,12 +57,32 @@ public class ShopDetail {
         this.distance = distance;
     }
 
+    public double getShopLatitude() {
+        return shopLatitude;
+    }
+
+    public void setShopLatitude(double shopLatitude) {
+        this.shopLatitude = shopLatitude;
+    }
+
+    public double getShopLongitude() {
+        return shopLongitude;
+    }
+
+    public void setShopLongitude(double shopLongitude) {
+        this.shopLongitude = shopLongitude;
+    }
+
     public String getShopRating() {
         return shopRating;
     }
 
     public void setShopRating(String shopRating) {
-        this.shopRating = shopRating;
+        if(null!=shopRating) {
+            this.shopRating = shopRating;
+        }else{
+            this.shopRating="0.0";
+        }
     }
 
     public String getShopStatus() {
@@ -71,22 +91,6 @@ public class ShopDetail {
 
     public void setShopStatus(String shopStatus) {
         this.shopStatus = shopStatus;
-    }
-
-    public String getShopLatitude() {
-        return shopLatitude;
-    }
-
-    public void setShopLatitude(String shopLatitude) {
-        this.shopLatitude = shopLatitude;
-    }
-
-    public String getShopLongitude() {
-        return shopLongitude;
-    }
-
-    public void setShopLongitude(String shopLongitude) {
-        this.shopLongitude = shopLongitude;
     }
 
     public String getShopAddress() {
