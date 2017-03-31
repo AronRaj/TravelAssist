@@ -44,6 +44,7 @@ public class ShopProvider extends ContentProvider {
         String SHOP_LONGITUDE = "shop_long";
         String SHOP_DISTANCE = "shop_distance";
         String SHOP_RATING = "shop_rating";
+        String SHOP_TOTAL_RATED = "shop_total_rated";
         String SHOP_STATUS = "shop_status";
         String SHOP_ADDRESS = "shop_address";
         String SHOP_MOBILE = "shop_mobile";
@@ -69,7 +70,7 @@ public class ShopProvider extends ContentProvider {
     private static final String CREATE_SHOP_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_SHOP + "("
             + SHOP_COLUMNS.SHOP_ID + " TEXT PRIMARY KEY ," + SHOP_COLUMNS.SHOP_NAME + " TEXT," +
-            SHOP_COLUMNS.SHOP_TYPE + " TEXT," + SHOP_COLUMNS.SHOP_CUISINE + " TEXT," + SHOP_COLUMNS.SHOP_RATING + " TEXT," +
+            SHOP_COLUMNS.SHOP_TYPE + " TEXT," + SHOP_COLUMNS.SHOP_CUISINE + " TEXT," + SHOP_COLUMNS.SHOP_RATING + " TEXT," + SHOP_COLUMNS.SHOP_TOTAL_RATED + " TEXT," +
             SHOP_COLUMNS.SHOP_LATITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_LONGITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," +
             SHOP_COLUMNS.SHOP_MOBILE + " TEXT,"+SHOP_COLUMNS.SHOP_STATUS + " TEXT,"+SHOP_COLUMNS.SHOP_DISTANCE + " INTEGER," + SHOP_COLUMNS.SHOP_INFO_PROCESSED + " INTEGER DEFAULT 0)";
 

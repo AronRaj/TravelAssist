@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="1"
+    android:background="@mipmap/white_bg"
     android:clickable="true"
-    android:background="@mipmap/white_bg">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <LinearLayout
         android:id="@+id/hotel_detail"
@@ -33,30 +33,44 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
-
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
             <RatingBar
                 android:id="@+id/hotel_rating"
                 style="?android:attr/ratingBarStyleSmall"
-                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
                 android:rating="2.5"
-                android:stepSize="0.1" />
+                android:stepSize="0.1"
+                android:theme="@style/RatingBar" />
+                <TextView
+                    android:id="@+id/total_rated_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="(60)"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/hotel_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="A2B"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/hotel_cuisine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Veg, Chettinadu" />
+                android:text="Veg, Chettinadu"
+                android:singleLine="true"
+                android:ellipsize="marquee"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -76,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
-                android:text="Map View"
                 android:clickable="true"
+                android:text="Map View"
                 android:textSize="20sp" />
 
             <TextView
@@ -87,8 +101,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="50dp"
-                android:text="Info"
                 android:clickable="true"
+                android:text="Info"
                 android:textSize="20sp" />
 
         </RelativeLayout>
@@ -104,8 +118,7 @@
         <ListView
             android:id="@+id/hotel_menu_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="4dp" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 </LinearLayout>

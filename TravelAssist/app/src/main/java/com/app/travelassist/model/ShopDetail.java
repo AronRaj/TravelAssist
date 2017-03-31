@@ -15,6 +15,7 @@ public class ShopDetail {
     private String shopAddress;
     private String shopMobile;
     private String shopRating;
+    private String shopTotalRated;
     private String shopStatus;
 
     public String getShopName() {
@@ -82,6 +83,18 @@ public class ShopDetail {
             this.shopRating = shopRating;
         }else{
             this.shopRating="0.0";
+        }
+    }
+
+    public String getShopTotalRated() {
+        return shopTotalRated;
+    }
+
+    public void setShopTotalRated(String shopTotalRated) {
+        if(null!=shopTotalRated) {
+            this.shopTotalRated = shopTotalRated;
+        }else{
+            this.shopTotalRated="0";
         }
     }
 

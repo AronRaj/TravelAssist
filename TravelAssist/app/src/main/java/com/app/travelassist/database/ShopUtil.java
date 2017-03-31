@@ -55,8 +55,10 @@ public class ShopUtil {
             shopInfo.setShopName((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_NAME))));
             shopInfo.setShopCuisine((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_CUISINE))));
             shopInfo.setShopRating((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_RATING))));
+            shopInfo.setShopTotalRated((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_TOTAL_RATED))));
             shopInfo.setShopLatitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE))));
             shopInfo.setShopLongitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE))));
+            shopInfo.setShopMobile((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE))));
         }
         return shopInfo;
     }
@@ -102,6 +104,7 @@ public class ShopUtil {
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_TYPE, shop.getShopType());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_DISTANCE, shop.getDistance());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_RATING, shop.getShopRating());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_TOTAL_RATED, shop.getShopTotalRated());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_STATUS, shop.getShopStatus());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE, shop.getShopLatitude());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE, shop.getShopLongitude());

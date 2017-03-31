@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@mipmap/white_bg"
     tools:context="com.app.travelassist.ui.HotelInfoFragment">
 
     <LinearLayout
@@ -55,6 +57,7 @@
             android:background="#EEEEEE"
             android:layout_weight="0.1">
             <TextView
+                android:id="@+id/total_ratings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
@@ -96,7 +99,7 @@
                 android:textSize="20sp"
                 android:text="Rate your experience !!!"/>
             <RatingBar
-                android:id="@+id/rating_bar_shop"
+                android:id="@+id/customer_rating_bar_shop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="false"
@@ -106,10 +109,17 @@
                 android:rating="0.0"
                 android:stepSize="0.1" />
             <EditText
+                android:id="@+id/customer_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Comments"
                 android:ems="15"/>
+            <Button
+                android:id="@+id/rating_submit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Rate us"/>
         </LinearLayout>
     </LinearLayout>
 

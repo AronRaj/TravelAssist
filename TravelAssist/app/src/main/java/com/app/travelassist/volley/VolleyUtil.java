@@ -61,6 +61,33 @@ public class VolleyUtil {
         VolleySingleton.getInstance(ShopApplication.getShopContext()).addToRequestQueue(jsObjRequest);
     }
 
+    public static void submitShopRating(String shopId,float shopRating, String comments) {
+        String lUrl = "";
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, lUrl, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "getLocationInfo() :: onResponse() ::" + response);
+                        try {
+                            Log.i(TAG, "Response : " + response.toString());
+                        } catch (Exception e) {
+                            Log.e(TAG, "Error Response : "+e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "getAllData() :: onErrorResponse() ::" + error);
+
+
+                    }
+                });
+        VolleySingleton.getInstance(ShopApplication.getShopContext()).addToRequestQueue(jsObjRequest);
+    }
+
     public static void getTravelInfo(String source, String destination) {
         /*String lUrl = LocationInterface.MATRIX_API_BASE_URL+LocationInterface.ORIGIN_KEY+source
                 +LocationInterface.DESTINATION_KEY+destination+LocationInterface.API_KEY+LocationInterface.DISTANCE_MATRIX_API_KEY;

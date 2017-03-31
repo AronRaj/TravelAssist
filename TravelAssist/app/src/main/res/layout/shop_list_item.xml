@@ -59,7 +59,9 @@
                     android:layout_marginTop="5dp"
                     android:text="South-Indian"
                     android:textColor="@color/shop_name_color"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/shop_distance"

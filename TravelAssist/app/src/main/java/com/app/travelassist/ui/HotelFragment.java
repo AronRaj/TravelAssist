@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class HotelFragment extends Fragment {
     private View mRootView;
     private ImageView hotelImage;
     private RatingBar hotelRating;
+    private TextView mShopTotalRatings;
     private TextView hotelName;
     private TextView hotelCuisine;
     private TextView hotelMapText;
@@ -75,6 +77,7 @@ public class HotelFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_hotel, container, false);
         hotelImage = (ImageView) mRootView.findViewById(R.id.hotel_image);
+        mShopTotalRatings = (TextView) mRootView.findViewById(R.id.total_rated_count);
         hotelName = (TextView) mRootView.findViewById(R.id.hotel_name);
         hotelCuisine = (TextView) mRootView.findViewById(R.id.hotel_cuisine);
         hotelMapText = (TextView) mRootView.findViewById(R.id.hotel_map_text);
@@ -94,7 +97,7 @@ public class HotelFragment extends Fragment {
         hotelInfoText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = HotelInfoFragment.newInstance("");
+                Fragment fragment = HotelInfoFragment.newInstance(shopId);
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);
@@ -125,12 +128,26 @@ public class HotelFragment extends Fragment {
         return mRootView;
     }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("Test","onDestroy()");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Travel");
+    }
+
     private void populateShopData() {
         ShopDetail shop = ShopUtil.getShopInfo(shopId);
         if (null != shop) {
             hotelName.setText(shop.getShopName());
+            try {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(shop.getShopName());
+            }catch (Exception e){
+                Log.d("Test",e.getMessage());
+            }
             hotelCuisine.setText(shop.getShopCuisine());
             hotelRating.setRating(Float.parseFloat(shop.getShopRating()));
+            mShopTotalRatings.setText("("+shop.getShopTotalRated()+")");
         }
 
     }
