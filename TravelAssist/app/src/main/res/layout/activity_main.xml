@@ -10,7 +10,7 @@
         android:layout_height="300dp"
         android:layout_centerInParent="true"
         android:src="@mipmap/gov"/>
-    <TextView
+    <customfonts.MyTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
@@ -19,7 +19,7 @@
         android:textAlignment="center"
         android:textColor="@color/shop_name_color"
         android:textSize="15sp" />
-    <TextView
+    <customfonts.MyTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ministry"
@@ -28,7 +28,7 @@
         android:textAlignment="center"
         android:textColor="@color/shop_name_color"
         android:textSize="15sp" />
-    <TextView
+    <customfonts.MyTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ministry"
