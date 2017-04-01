@@ -28,9 +28,7 @@ public class VolleyUtil {
      * Method to get all the data with shopid
      */
     public static void getShopsWithLatLng(double currentLat, double currentLong, String type, String radius) {
-        String lUrl = ShopInterface.API_BASE_URL+ShopInterface.LOCATION_KEY+currentLat+","+currentLong
-                +ShopInterface.TYPE_KEY+type+ShopInterface.RADIUS_KEY+radius+ShopInterface.API_KEY+ShopInterface.GOOGLE_API_KEY;
-
+        String lUrl = ShopInterface.API_BASE_URL+ShopInterface.LATITUDE_KEY+currentLat+ShopInterface.LONGITUDE_KEY+currentLong;
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, lUrl, null, new Response.Listener<JSONObject>() {
 

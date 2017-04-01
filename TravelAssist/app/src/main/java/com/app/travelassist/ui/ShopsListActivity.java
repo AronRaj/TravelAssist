@@ -1,13 +1,20 @@
 package com.app.travelassist.ui;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,22 +31,29 @@ import android.widget.Toast;
 
 import com.app.travelassist.R;
 import com.app.travelassist.database.ShopUtil;
+import com.app.travelassist.model.Item;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.util.LocationManager;
+import com.app.travelassist.util.NetworkUtil;
+import com.app.travelassist.util.ShopInterface;
 import com.app.travelassist.util.ShopListAdapter;
 import com.app.travelassist.volley.VolleyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ShopsListActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class ShopsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ShopListAdapter adapter;
     private RecyclerView moviesRecyclerView;
     private ProgressBar mProgressBar;
     private TextView emptyView;
     private List<ShopDetail> shopsList;
+    BroadcastReceiver mDataProcessedREceiver;
+
+    private AlertDialog mInternetDialog;
+    private AlertDialog mGpsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +80,43 @@ public class ShopsListActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        getSupportActionBar().setTitle("Travel");
+        mDataProcessedREceiver = new DataProcessedReceiver();
+        IntentFilter lIntentFilter = new IntentFilter();
+        lIntentFilter.addAction(ShopInterface.ACTION_SHOP_LIST);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mDataProcessedREceiver, lIntentFilter);
+        getSupportActionBar().setTitle(getString(R.string.app_name));
         Intent intent = new Intent(this, LocationManager.class);
         startService(intent);
         putDummyData();
+        if (!NetworkUtil.isInternetAvailable(this)) {
+            showInternetDialog();
+        } else if (!NetworkUtil.isGPSEnabled(this)) {
+            showGPSDisabledAlertToUser();
+        }
         putDummyItems();
         new LoadDataAsync().execute();
+
     }
 
-    private class LoadDataAsync extends AsyncTask<Void, Void, Void> {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mDataProcessedREceiver);
+        if (null != mInternetDialog && mInternetDialog.isShowing()) {
+            mInternetDialog.dismiss();
+        }
+        if (null != mGpsDialog && mGpsDialog.isShowing()) {
+            mGpsDialog.dismiss();
+        }
+
+    }
+
+    public class LoadDataAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             shopsList = ShopUtil.getShopsList();
-            adapter = new ShopListAdapter(ShopsListActivity.this,getApplicationContext(), shopsList);
+            adapter = new ShopListAdapter(ShopsListActivity.this, getApplicationContext(), shopsList);
             return null;
         }
 
@@ -100,12 +137,67 @@ public class ShopsListActivity extends AppCompatActivity
         }
     }
 
+    private class DataProcessedReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new LoadDataAsync().execute();
+        }
+    }
+
+    private void showGPSDisabledAlertToUser() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(getString(R.string.gps_dialog_text))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.setting),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        mGpsDialog = alertDialogBuilder.create();
+        mGpsDialog.show();
+
+    }
 
 
-    private void putDummyData(){
-        //VolleyUtil.getShopsWithLatLng(12.9913,77.6874,"restaurant","500");
-        List<ShopDetail> list=new ArrayList<>();
-        ShopDetail shop1=new ShopDetail();
+    private void showInternetDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(getString(R.string.internet_dialog_text))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.setting),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                Intent intent = new Intent(android.provider.Settings.ACTION_SETTINGS);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        mInternetDialog = alertDialogBuilder.create();
+        mInternetDialog.show();
+    }
+
+
+    private void putDummyData() {
+        // VolleyUtil.getShopsWithLatLng(12.9611, 80.1372, "restaurant", "500");
+        List<ShopDetail> list = new ArrayList<>();
+        ShopDetail shop1 = new ShopDetail();
         shop1.setShopId("S001");
         shop1.setShopName("A2B");
         shop1.setShopCuisine("North-Indian,South-Indian,Punjabi");
@@ -118,7 +210,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop1.setShopMobile("12345");
         shop1.setShopLatitude(12.991131);
         shop1.setShopLongitude(77.6878);
-        ShopDetail shop2=new ShopDetail();
+        shop1.setShopImageUrl("http://www.hotelvazzana.it/img/-3/1_IMGLOGOURL_20150706_103632.png?20170128121916");
+        ShopDetail shop2 = new ShopDetail();
         shop2.setShopId("S002");
         shop2.setShopName("Saravana Bhavan");
         shop2.setShopCuisine("South-Indian,Chettinadu");
@@ -131,7 +224,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop2.setShopMobile("12345");
         shop2.setShopLatitude(12.99128);
         shop2.setShopLongitude(77.68736699999999);
-        ShopDetail shop3=new ShopDetail();
+        shop2.setShopImageUrl("http://www.sa-suppliers.co.za/ftp/Logo/Bar&RestaurantLogo.gif");
+        ShopDetail shop3 = new ShopDetail();
         shop3.setShopId("S003");
         shop3.setShopName("Akshaya Bhavan");
         shop3.setShopCuisine("Classic,Chettinadu");
@@ -144,7 +238,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop3.setShopMobile("12345");
         shop3.setShopLatitude(12.9903981);
         shop3.setShopLongitude(77.68842189999999);
-        ShopDetail shop4=new ShopDetail();
+        shop3.setShopImageUrl("http://webneel.com/sites/default/files/images/manual/logo-restaurant/best-restaurant-logo-design%20(12).gif");
+        ShopDetail shop4 = new ShopDetail();
         shop4.setShopId("S004");
         shop4.setShopName("Lakshmi Hotel");
         shop4.setShopCuisine("Punjabi,Bihari");
@@ -157,7 +252,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop4.setShopMobile("12345");
         shop4.setShopLatitude(12.9917923);
         shop4.setShopLongitude(77.6905379);
-        ShopDetail shop5=new ShopDetail();
+        shop4.setShopImageUrl("https://s-media-cache-ak0.pinimg.com/originals/58/de/c1/58dec1c5eba9bcb109d5da9b8cdb5af1.jpg");
+        ShopDetail shop5 = new ShopDetail();
         shop5.setShopId("S005");
         shop5.setShopName("malika departmental");
         shop5.setShopCuisine("Grocery");
@@ -170,7 +266,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop5.setShopMobile("12345");
         shop5.setShopLatitude(12.991292);
         shop5.setShopLongitude(77.6877507);
-        ShopDetail shop6=new ShopDetail();
+        shop5.setShopImageUrl("http://weandthecolor.com/wp-content/uploads/2015/04/Cartel-restaurants-Ukraine.jpg");
+        ShopDetail shop6 = new ShopDetail();
         shop6.setShopId("S006");
         shop6.setShopName("A to Z departments");
         shop6.setShopCuisine("Classic,Chettinadu");
@@ -183,7 +280,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop6.setShopMobile("12345");
         shop6.setShopLatitude(12.9914844);
         shop6.setShopLongitude(77.6877976);
-        ShopDetail shop7=new ShopDetail();
+        shop6.setShopImageUrl("http://images.naldzgraphics.net/2011/11/4-BonafideRestaurant.jpg");
+        ShopDetail shop7 = new ShopDetail();
         shop7.setShopId("S007");
         shop7.setShopName("Just Bake");
         shop7.setShopCuisine("Cakes, Pastry");
@@ -196,7 +294,8 @@ public class ShopsListActivity extends AppCompatActivity
         shop7.setShopMobile("12345");
         shop7.setShopLatitude(12.990971);
         shop7.setShopLongitude(77.68788099999999);
-        ShopDetail shop8=new ShopDetail();
+        shop7.setShopImageUrl("http://images.naldzgraphics.net/2013/06/17-seventeen-TheRoyalChef.jpg");
+        ShopDetail shop8 = new ShopDetail();
         shop8.setShopId("S008");
         shop8.setShopName("Ayengar Bakery");
         shop8.setShopCuisine("Tea, Coffee");
@@ -209,6 +308,7 @@ public class ShopsListActivity extends AppCompatActivity
         shop8.setShopMobile("12345");
         shop8.setShopLatitude(12.991084);
         shop8.setShopLongitude(77.6880572);
+        shop8.setShopImageUrl("https://s-media-cache-ak0.pinimg.com/originals/7f/c5/41/7fc541dc4b8c1cc14312049d2eb876ef.png");
 
         list.add(shop1);
         list.add(shop2);
@@ -221,56 +321,57 @@ public class ShopsListActivity extends AppCompatActivity
         ShopUtil.addShopsList(list);
     }
 
-    private void putDummyItems(){
-        List<com.app.travelassist.model.MenuItem> list=new ArrayList<>();
-        com.app.travelassist.model.MenuItem item1=new com.app.travelassist.model.MenuItem();
-        item1.setItemId("I001");
+    private void putDummyItems() {
+        List<Item> list = new ArrayList<>();
+        Item item1 = new Item();
+
         item1.setItemName("Idly");
-        item1.setItemCategory("Breakfast");
         item1.setItemPrice("Rs.20");
-        item1.setShopId("S001");
+        item1.setItemID("I001");
+        item1.setItemType("Breakfast");
+        item1.setShopID("S001");
 
-        com.app.travelassist.model.MenuItem item2=new com.app.travelassist.model.MenuItem();
-        item2.setItemId("I002");
+        Item item2 = new Item();
+        item2.setItemID("I002");
         item2.setItemName("Dosa");
-        item2.setItemCategory("Breakfast");
+        item2.setItemPrice("Breakfast");
         item2.setItemPrice("Rs.30");
-        item2.setShopId("S001");
+        item2.setShopID("S001");
 
-        com.app.travelassist.model.MenuItem item3=new com.app.travelassist.model.MenuItem();
-        item3.setItemId("I003");
+        Item item3 = new Item();
+        item3.setItemID("I003");
         item3.setItemName("Vada");
-        item3.setItemCategory("Breakfast");
+        item3.setItemType("Breakfast");
         item3.setItemPrice("Rs.10");
-        item3.setShopId("S001");
+        item3.setShopID("S001");
 
-        com.app.travelassist.model.MenuItem item4=new com.app.travelassist.model.MenuItem();
-        item4.setItemId("I004");
+        Item item4 = new Item();
+        item4.setItemID("I004");
         item4.setItemName("Tandoori Roti");
-        item4.setItemCategory("Roti");
+        item4.setItemType("Roti");
         item4.setItemPrice("Rs.25");
-        item4.setShopId("S002");
+        item4.setShopID("S002");
 
-        com.app.travelassist.model.MenuItem item5=new com.app.travelassist.model.MenuItem();
-        item5.setItemId("I005");
+        Item item5 = new Item();
+        item5.setItemID("I005");
         item5.setItemName("Panner Butter Masala");
-        item5.setItemCategory("Veg gravy");
+        item5.setItemType("Veg gravy");
         item5.setItemPrice("Rs.70");
-        item5.setShopId("S002");
+        item5.setShopID("S002");
 
-        com.app.travelassist.model.MenuItem item6=new com.app.travelassist.model.MenuItem();
-        item6.setItemId("I006");
+        Item item6 = new Item();
+        item6.setItemID("I006");
         item6.setItemName("Chicken Briyani");
-        item6.setItemCategory("Briyani");
+        item6.setItemType("Briyani");
         item6.setItemPrice("Rs.140");
-        item6.setShopId("S002");
+        item6.setShopID("S002");
 
-        com.app.travelassist.model.MenuItem item7=new com.app.travelassist.model.MenuItem();
-        item7.setItemId("I007");
+        Item item7 = new Item();
+        item7.setItemID("I007");
         item7.setItemName("Gulab Jamun");
-        item7.setItemCategory("Dessert");
+        item7.setItemType("Dessert");
         item7.setItemPrice("Rs.50");
-        item7.setShopId("S002");
+        item7.setShopID("S002");
 
         list.add(item1);
         list.add(item2);
@@ -303,39 +404,33 @@ public class ShopsListActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.lang_eng:
+                break;
+            case R.id.lang_hindi:
+                break;
+            case R.id.lang_tamil:
+                break;
+            default:
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (id){
+            case R.id.near:{
+                break;
+            }
+            case R.id.trip:{
+                Intent intent =new Intent(this,TripPlanActivity.class);
+                startActivity(intent);
+                break;
+            }
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

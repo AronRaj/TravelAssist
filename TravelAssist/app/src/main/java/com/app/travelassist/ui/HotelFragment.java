@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.app.travelassist.R;
 import com.app.travelassist.database.ShopUtil;
 import com.app.travelassist.model.ShopDetail;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,7 @@ public class HotelFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d("Test","onDestroy()");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Travel");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.app_name));
     }
 
     private void populateShopData() {
@@ -148,9 +149,9 @@ public class HotelFragment extends Fragment {
             hotelCuisine.setText(shop.getShopCuisine());
             hotelRating.setRating(Float.parseFloat(shop.getShopRating()));
             mShopTotalRatings.setText("("+shop.getShopTotalRated()+")");
+            Picasso.with(getActivity()).load(shop.getShopImageUrl()).into(hotelImage);
+        }
         }
 
     }
 
-
-}

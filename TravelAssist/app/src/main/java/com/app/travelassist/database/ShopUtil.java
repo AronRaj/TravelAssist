@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 
+import com.app.travelassist.model.Item;
 import com.app.travelassist.model.MenuItem;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.app.ShopApplication;
@@ -59,6 +60,7 @@ public class ShopUtil {
             shopInfo.setShopLatitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE))));
             shopInfo.setShopLongitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE))));
             shopInfo.setShopMobile((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE))));
+            shopInfo.setShopImageUrl((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL))));
         }
         return shopInfo;
     }
@@ -77,9 +79,12 @@ public class ShopUtil {
                     data.setShopName(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_NAME)));
                     data.setShopType(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_TYPE)));
                     data.setShopCuisine(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_CUISINE)));
+                    data.setShopLatitude(lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LATITUDE)));
+                    data.setShopLongitude(lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE)));
                     data.setDistance(lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_DISTANCE)));
                     data.setShopRating(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_RATING)));
                     data.setShopStatus(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_STATUS)));
+                    data.setShopImageUrl(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL)));
                     shopsList.add(data);
                 }
             } catch (Exception e) {
@@ -110,6 +115,7 @@ public class ShopUtil {
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE, shop.getShopLongitude());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE, shop.getShopMobile());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_ADDRESS, shop.getShopAddress());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL, shop.getShopImageUrl());
             int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, lSelection, lSelectionArg);
                 Log.d(TAG, "addShopsList() :: CONTENT_URI_SHOP_TABLE rows count " + count);
             if (count == 0) {
@@ -118,15 +124,15 @@ public class ShopUtil {
         }
     }
 
-    public static void addItemsList(List<MenuItem> itemsList){
-        List<MenuItem> list=itemsList;
-        for(MenuItem item:itemsList){
+    public static void addItemsList(List<Item> itemsList){
+        List<Item> list=itemsList;
+        for(Item item:itemsList){
             ContentValues lItemContentValue = new ContentValues();
-            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_ID, item.getItemId());
+            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_ID, item.getItemID());
             lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_NAME, item.getItemName());
             lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_PRICE, item.getItemPrice());
-            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_CATEGORY, item.getItemCategory());
-            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.SHOP_ID, item.getShopId());
+            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.ITEM_CATEGORY, item.getItemType());
+            lItemContentValue.put(ShopProvider.MENU_ITEM_COLUMNS.SHOP_ID, item.getShopID());
             /*int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lItemContentValue, null, null);
                 Log.d(TAG, "addItemsList() :: CONTENT_URI_SHOP_TABLE rows count " + count);
             if (count == 0) {*/
@@ -226,14 +232,16 @@ public class ShopUtil {
     }
 
     public static void updateCurrentLocation(Location location){
-        ContentValues lValue = new ContentValues();
-        lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE, location.getLatitude());
-        lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE, location.getLongitude());
-        int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, lValue, null, null);
-        Log.d(TAG, "updateCurrentLocation() :: count " + count);
-        if(count==0){
-          Uri lUri=  ShopApplication.getShopContext().getContentResolver().insert(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE,lValue);
-            Log.d(TAG, "updateCurrentLocation() :: Uri " + lUri);
+        if(null!=location) {
+            ContentValues lValue = new ContentValues();
+            lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LATITUDE, location.getLatitude());
+            lValue.put(ShopProvider.LOCATION_COLUMNS.CURRENT_LONGITUDE, location.getLongitude());
+            int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, lValue, null, null);
+            Log.d(TAG, "updateCurrentLocation() :: count " + count);
+            if (count == 0) {
+                Uri lUri = ShopApplication.getShopContext().getContentResolver().insert(ShopProvider.CONTENT_URI_CURRENT_LOCATION_TABLE, lValue);
+                Log.d(TAG, "updateCurrentLocation() :: Uri " + lUri);
+            }
         }
     }
 

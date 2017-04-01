@@ -7,11 +7,13 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.app.travelassist.R;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.ui.HotelFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.Simple
         public final TextView shopDistance;
         public final TextView shopStatus;
         public final RatingBar shopRating;
+        public final ImageView shopImage;
 
 
         public SimpleViewHolder(View view) {
@@ -53,6 +57,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.Simple
             shopDistance = (TextView) view.findViewById(R.id.shop_distance);
             shopStatus = (TextView) view.findViewById(R.id.shop_status);
             shopRating = (RatingBar) view.findViewById(R.id.shop_rating);
+            shopImage=(ImageView)view.findViewById(R.id.shopicon);
 
         }
 
@@ -90,6 +95,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<ShopListAdapter.Simple
         holder.shopDistance.setText(String.valueOf(mData.get(position).getDistance())+" Km");
         holder.shopRating.setRating(Float.parseFloat(mData.get(position).getShopRating()));
         holder.shopStatus.setText("Status : "+mData.get(position).getShopStatus());
+        Picasso.with(mContext).load(mData.get(position).getShopImageUrl()).into(holder.shopImage);
     }
 
     @Override

@@ -23,6 +23,7 @@ public class ShopProvider extends ContentProvider {
     public static final String TABLE_SHOP = "shop_table";
     public static final String TABLE_MENU_ITEM = "menu_item_table";
     public static final String TABLE_CURRENT_LOCATION = "current_location";
+    public static final String TABLE_SHOP_RATING = "shop_rating";
     private static final int DATABASE_VERSION = 1;
 
     public static final String AUTHORITY = "com.app.travelassist.database.ShopProvider";
@@ -30,6 +31,7 @@ public class ShopProvider extends ContentProvider {
     public static final Uri CONTENT_URI_SHOP_TABLE = Uri.parse(CONTENT_URI + "/" + TABLE_SHOP);
     public static final Uri CONTENT_URI_MENU_ITEM_TABLE = Uri.parse(CONTENT_URI + "/" + TABLE_MENU_ITEM);
     public static final Uri CONTENT_URI_CURRENT_LOCATION_TABLE = Uri.parse(CONTENT_URI + "/" + TABLE_CURRENT_LOCATION);
+    public static final Uri CONTENT_URI_SHOP_RATING_TABLE = Uri.parse(CONTENT_URI + "/" + TABLE_SHOP_RATING);
 
     public DatabaseHelper mDbHelper;
     private static final UriMatcher sUriMatcher;
@@ -48,6 +50,7 @@ public class ShopProvider extends ContentProvider {
         String SHOP_STATUS = "shop_status";
         String SHOP_ADDRESS = "shop_address";
         String SHOP_MOBILE = "shop_mobile";
+        String SHOP_IMAGE_URL = "shop_image_url";
         String SHOP_INFO_PROCESSED = "shop_info_processed";
         int SHOP_LOCATION_UN_PROCESSED = 0;
         int SHOP_LOCATION_PROCESSED = 1;
@@ -66,12 +69,18 @@ public class ShopProvider extends ContentProvider {
         String CURRENT_LONGITUDE = "current_longitude";
     }
 
+    public interface RATING_COLUMNS {
+        String SHOP_ID = "shop_id";
+        String RATING_ITEM = "rating_item";
+        String RATING_COMMENT = "rating_comment";
+    }
+
 
     private static final String CREATE_SHOP_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_SHOP + "("
             + SHOP_COLUMNS.SHOP_ID + " TEXT PRIMARY KEY ," + SHOP_COLUMNS.SHOP_NAME + " TEXT," +
             SHOP_COLUMNS.SHOP_TYPE + " TEXT," + SHOP_COLUMNS.SHOP_CUISINE + " TEXT," + SHOP_COLUMNS.SHOP_RATING + " TEXT," + SHOP_COLUMNS.SHOP_TOTAL_RATED + " TEXT," +
-            SHOP_COLUMNS.SHOP_LATITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_LONGITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," +
+            SHOP_COLUMNS.SHOP_LATITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_LONGITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," + SHOP_COLUMNS.SHOP_IMAGE_URL + " TEXT," +
             SHOP_COLUMNS.SHOP_MOBILE + " TEXT,"+SHOP_COLUMNS.SHOP_STATUS + " TEXT,"+SHOP_COLUMNS.SHOP_DISTANCE + " INTEGER," + SHOP_COLUMNS.SHOP_INFO_PROCESSED + " INTEGER DEFAULT 0)";
 
     private static final String CREATE_MENU_ITEM_TABLE = "CREATE TABLE IF NOT EXISTS "
@@ -84,9 +93,15 @@ public class ShopProvider extends ContentProvider {
             + TABLE_CURRENT_LOCATION + "("
             + LOCATION_COLUMNS.CURRENT_LATITUDE + " DOUBLE,"+ LOCATION_COLUMNS.CURRENT_LONGITUDE + " DOUBLE)";
 
+    private static final String CREATE_SHOP_RATING_TABLE = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_SHOP_RATING + "("
+            + RATING_COLUMNS.SHOP_ID + " TEXT,"+ RATING_COLUMNS.RATING_COMMENT + " TEXT,"
+            + RATING_COLUMNS.RATING_ITEM + " DOUBLE)";
+
     private static final int CASE_SHOP_TABLE = 1;
     private static final int CASE_MENU_ITEM_TABLE = 2;
     private static final int CASE_CURRENT_LOCATION_TABLE = 3;
+    private static final int CASE_SHOP_RATING_TABLE = 4;
     private static final int CASE_DEFAULT = 5;
 
     static {
@@ -94,6 +109,7 @@ public class ShopProvider extends ContentProvider {
         sUriMatcher.addURI(AUTHORITY, TABLE_SHOP, CASE_SHOP_TABLE);
         sUriMatcher.addURI(AUTHORITY, TABLE_MENU_ITEM, CASE_MENU_ITEM_TABLE);
         sUriMatcher.addURI(AUTHORITY, TABLE_CURRENT_LOCATION, CASE_CURRENT_LOCATION_TABLE);
+        sUriMatcher.addURI(AUTHORITY, TABLE_SHOP_RATING, CASE_SHOP_RATING_TABLE);
         sUriMatcher.addURI(AUTHORITY, "/*", CASE_DEFAULT);
     }
 
@@ -108,6 +124,8 @@ public class ShopProvider extends ContentProvider {
                 return AUTHORITY + "/" + TABLE_MENU_ITEM;
             case CASE_CURRENT_LOCATION_TABLE:
                 return AUTHORITY + "/" + TABLE_CURRENT_LOCATION;
+            case CASE_SHOP_RATING_TABLE:
+                return AUTHORITY + "/" + TABLE_SHOP_RATING;
             case CASE_DEFAULT:
                 return AUTHORITY + "/*";
             default:
@@ -123,6 +141,7 @@ public class ShopProvider extends ContentProvider {
         db.execSQL(CREATE_SHOP_TABLE);
         db.execSQL(CREATE_MENU_ITEM_TABLE);
         db.execSQL(CREATE_CURRENT_LOCATION_TABLE);
+        db.execSQL(CREATE_SHOP_RATING_TABLE);
         return false;
     }
 
@@ -141,6 +160,10 @@ public class ShopProvider extends ContentProvider {
                 lCursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case CASE_CURRENT_LOCATION_TABLE:
+                queryBuilder.setTables(uri.getLastPathSegment());
+                lCursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            case CASE_SHOP_RATING_TABLE:
                 queryBuilder.setTables(uri.getLastPathSegment());
                 lCursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
@@ -178,6 +201,13 @@ public class ShopProvider extends ContentProvider {
 
                 }
                 break;
+            case CASE_SHOP_RATING_TABLE:
+                try {
+                    lRowId = lDb.insertOrThrow(uri.getLastPathSegment(), null, values);
+                } catch (Exception e) {
+
+                }
+                break;
             default:
                 break;
 
@@ -203,6 +233,9 @@ public class ShopProvider extends ContentProvider {
             case CASE_CURRENT_LOCATION_TABLE:
                 count = db.delete(uri.getLastPathSegment(), selection, selectionArgs);
                 break;
+            case CASE_SHOP_RATING_TABLE:
+                count = db.delete(uri.getLastPathSegment(), selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI " + uri);
         }
@@ -221,6 +254,9 @@ public class ShopProvider extends ContentProvider {
                 lCount = lDb.update(uri.getLastPathSegment(), values, selection, selectionArgs);
                 break;
             case CASE_CURRENT_LOCATION_TABLE:
+                lCount = lDb.update(uri.getLastPathSegment(), values, selection, selectionArgs);
+                break;
+            case CASE_SHOP_RATING_TABLE:
                 lCount = lDb.update(uri.getLastPathSegment(), values, selection, selectionArgs);
                 break;
             default:

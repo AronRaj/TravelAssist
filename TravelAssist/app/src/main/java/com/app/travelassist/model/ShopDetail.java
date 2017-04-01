@@ -17,6 +17,7 @@ public class ShopDetail {
     private String shopRating;
     private String shopTotalRated;
     private String shopStatus;
+    private String shopImageUrl;
 
     public String getShopName() {
         return shopName;
@@ -120,5 +121,13 @@ public class ShopDetail {
 
     public void setShopMobile(String shopMobile) {
         this.shopMobile = shopMobile;
+    }
+
+    public String getShopImageUrl() {
+        return shopImageUrl;
+    }
+
+    public void setShopImageUrl(String shopImageUrl) {
+        this.shopImageUrl = shopImageUrl;
     }
 }

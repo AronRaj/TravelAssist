@@ -9,11 +9,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.app.travelassist.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG="MainActivity";
 
     private static final long SPLASH_SCREEN_TIME_OUT = 3 * 1000;
     private Handler mHandler;
@@ -29,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (null != mHandler && null != mMoveNextRunnable) {
-            mHandler.postDelayed(mMoveNextRunnable, SPLASH_SCREEN_TIME_OUT);
-        }
+
     }
 
     @Override
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mHandler = new Handler();
         mMoveNextRunnable = new MovePageRunnable();
+    }
+
+    private void moveToNextPage(){
+        if (null != mHandler && null != mMoveNextRunnable) {
+            mHandler.postDelayed(mMoveNextRunnable, SPLASH_SCREEN_TIME_OUT);
+        }
     }
 
     private class MovePageRunnable implements Runnable {
@@ -63,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         if (!hasPermission) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
-            //selectImage();
+            moveToNextPage();
         }
     }
 
@@ -73,10 +80,11 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 1: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-                    //selectImage();
+                    Log.d(TAG,"Permission Granted");
+                    moveToNextPage();
+
                 } else {
-                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "The app was not allowed to access location. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -91,7 +91,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
                 android:clickable="true"
-                android:text="Map View"
+                android:text="@string/map_view_text"
                 android:textSize="20sp" />
 
             <TextView
@@ -102,7 +102,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="50dp"
                 android:clickable="true"
-                android:text="Info"
+                android:text="@string/info_text"
                 android:textSize="20sp" />
 
         </RelativeLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">டிஜிட்டல் பயணம்</string>
+    <string name="map_view_text">வரைபட காட்சி</string>
+    <string name="info_text">தகவல்</string>
+    <string name="no_shops_text">கிடைக்க கடைகள் இல்லை</string>
+</resources>

@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No shops available"
+        android:text="@string/no_shops_text"
         android:textSize="40sp"
         android:visibility="gone" />
     </FrameLayout>

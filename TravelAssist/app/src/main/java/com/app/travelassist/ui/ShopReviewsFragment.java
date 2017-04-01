@@ -15,8 +15,11 @@ import com.app.travelassist.R;
  * create an instance of this fragment.
  */
 public class ShopReviewsFragment extends Fragment {
+
+    private static final String TAG = "ShopReviewsFragment";
     private static final String SHOP_ID = "shopid";
 
+    private View mRootView;
     private String shopId;
 
 
@@ -43,7 +46,8 @@ public class ShopReviewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shop_reviews, container, false);
+        mRootView= inflater.inflate(R.layout.fragment_shop_reviews, container, false);
+        return mRootView;
     }
 
 }

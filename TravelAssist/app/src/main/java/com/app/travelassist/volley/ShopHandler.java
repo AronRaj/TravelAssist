@@ -1,15 +1,19 @@
 package com.app.travelassist.volley;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.app.travelassist.app.ShopApplication;
 import com.app.travelassist.database.ShopUtil;
-import com.app.travelassist.model.GoogleResult;
-import com.app.travelassist.model.Result;
+import com.app.travelassist.model.ApiResponse;
+import com.app.travelassist.model.Item;
+import com.app.travelassist.model.ShopData;
 import com.app.travelassist.model.ShopDetail;
 import com.app.travelassist.util.ShopInterface;
 import com.google.gson.Gson;
@@ -52,34 +56,39 @@ public class ShopHandler extends Handler {
         Gson gson = gsonBuilder.create();
         switch (msg.what) {
             case ShopInterface.HANDLE_SHOP_DETAILS: {
-                GoogleResult hotelsData = gson.fromJson(msg.getData().getString("data"), GoogleResult.class);
+                ApiResponse response = gson.fromJson(msg.getData().getString("data"), ApiResponse.class);
                 Location currentLocation=ShopUtil.getCurrentLocationFromDB();
-                if (null != hotelsData) {
-                    if (hotelsData.getStatus().equalsIgnoreCase(ShopInterface.STATUS_OK_KEY)) {
-                        List<Result> results = hotelsData.getResults();
-                        if (results.size() > 0) {
+                if (null != response) {
+                    if (response.getError().equalsIgnoreCase(ShopInterface.STATUS_OK_KEY)) {
+                        List<ShopData> results = response.getData();
+                        if (null!=results&&results.size() > 0) {
                             List<ShopDetail> shopsList=new ArrayList<>();
-                            for(Result result:results){
+                            for(ShopData result:results){
                                 ShopDetail shop=new ShopDetail();
-                                shop.setShopId(result.getId());
-                                shop.setShopName(result.getName());
-                                String lat=result.getGeometry().getLocation().getLat();
-                                String longitude=result.getGeometry().getLocation().getLng();
+                                shop.setShopId(result.getShopID());
+                                shop.setShopName(result.getShopName());
+                                shop.setShopType(result.getType());
+                                String lat=result.getLatitude();
+                                String longitude=result.getLongitude();
                                 double hotelLat=Double.parseDouble(lat);
                                 double hotelLong=Double.parseDouble(longitude);
                                 shop.setShopLatitude(hotelLat);
                                 shop.setShopLongitude(hotelLong);
                                 double distance=ShopUtil.getDistance(currentLocation.getLatitude(),currentLocation.getLongitude(),hotelLat,hotelLong);
                                 shop.setDistance(distance);
-                                shop.setShopAddress(result.getVicinity());
+                                shop.setShopAddress(result.getAddressLine1()+result.getAddressLine2()+result.getCity()+result.getPincode());
                                 shop.setShopRating(result.getRating());
-                                if(null!=result.getOpening_hours()) {
-                                    shop.setShopStatus(result.getOpening_hours().getOpen_now());
+                                List<Item> itemsList=result.getItem();
+                                if(null!=itemsList&&itemsList.size()>0){
+                                    ShopUtil.addItemsList(itemsList);
                                 }
                                 shopsList.add(shop);
                             }
                             ShopUtil.addShopsList(shopsList);
                             Log.d(TAG, "Success");
+                            Intent intent=new Intent();
+                            intent.setAction(ShopInterface.ACTION_SHOP_LIST);
+                            LocalBroadcastManager.getInstance(ShopApplication.getShopContext()).sendBroadcast(intent);
                         }
                     }
                 }

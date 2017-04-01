@@ -2,39 +2,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/app_bg">
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_centerInParent="true"
-        android:src="@mipmap/gov"/>
-    <customfonts.MyTextView
+        android:src="@mipmap/gov"/>-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/logo"
-        android:id="@+id/digital_india"
-        android:text="A Digital India Intiative"
-        android:textAlignment="center"
-        android:textColor="@color/shop_name_color"
-        android:textSize="15sp" />
-    <customfonts.MyTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ministry"
-        android:layout_below="@id/digital_india"
-        android:text="Ministry of Road Transport and Highways"
-        android:textAlignment="center"
-        android:textColor="@color/shop_name_color"
-        android:textSize="15sp" />
-    <customfonts.MyTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ministry"
-        android:text="Government of India"
-        android:textAlignment="center"
-        android:textColor="@color/shop_name_color"
-        android:textSize="15sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:id="@+id/app_banner_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:text="Digi Travel"
+                android:textAlignment="center"
+                android:textColor="@color/color_white"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5">
+        <customfonts.MyTextView
+            android:id="@+id/digital_india"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/app_banner_text"
+            android:text="A Digital India Intiative"
+            android:textAlignment="center"
+            android:textColor="@color/color_white"
+            android:textSize="15sp" />
+
+        <customfonts.MyTextView
+            android:id="@+id/ministry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/digital_india"
+            android:text="Ministry of Road Transport and Highways"
+            android:textAlignment="center"
+            android:textColor="@color/color_white"
+            android:textSize="15sp" />
+
+        <customfonts.MyTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ministry"
+            android:text="Government of India"
+            android:textAlignment="center"
+            android:textColor="@color/color_white"
+            android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
