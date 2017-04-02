@@ -19,5 +19,19 @@
     <string name="info_text">Info</string>
     <string name="no_shops_text">No shops available</string>
     <string name="title_activity_trip_plan">TripPlanActivity</string>
+    <string name="initiative">A Digital India Intiative</string>
+<string name="gov">Government of India</string>
+    <string name="mob">Mobile</string>
+    <string name="mail">Email</string>
+    <string name="rate">Ratings</string>
+    <string name="rate_exp">Rate your experience</string>
+    <string name="comment">Comments</string>
+    <string name="hotel">Hotel</string>
+    <string name="south">South-Indian</string>
+    <string name="dist">Distance</string>
+    <string name="typo">Type : Restaurant</string>
+    <string name="status">Status</string>
+    <string name="open">Open</string>
+    <string name="ministry">Ministry of Road Transport and Highways</string>
 
 </resources>

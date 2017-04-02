@@ -405,12 +405,12 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.lang_eng:
+            /*case R.id.lang_eng:
                 break;
             case R.id.lang_hindi:
                 break;
             case R.id.lang_tamil:
-                break;
+                break;*/
             default:
                 break;
         }

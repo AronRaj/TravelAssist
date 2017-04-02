@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Mobile"/>
+                android:text="@string/mob"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Email"/>
+                android:text="@string/mail"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:layout_gravity="center"
-                android:text="64 Ratings"/>
+                android:text="64 ratings"/>
             <RatingBar
                 android:id="@+id/shop_rating_bar"
                 android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:text="Rate your experience !!!"/>
+                android:text="@string/rate_exp"/>
             <RatingBar
                 android:id="@+id/customer_rating_bar_shop"
                 android:layout_width="wrap_content"
@@ -112,14 +112,14 @@
                 android:id="@+id/customer_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Comments"
+                android:hint="@string/comment"
                 android:ems="15"/>
             <Button
                 android:id="@+id/rating_submit_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Rate us"/>
+                android:text="@string/rate"/>
         </LinearLayout>
     </LinearLayout>
 

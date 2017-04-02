@@ -5,4 +5,20 @@
     <string name="map_view_text">வரைபட காட்சி</string>
     <string name="info_text">தகவல்</string>
     <string name="no_shops_text">கிடைக்க கடைகள் இல்லை</string>
+    <string name="initiative">ஒரு டிஜிட்டல் இந்தியா  முயற்சி</string>
+    <string name="open">திறந்த</string>
+    <string name="ministry">சாலைப் போக்குவரத்து மற்றும் நெடுஞ்சாலைகள் அமைச்சின்</string>
+    <string name="mob">மொபைல்</string>
+    <string name="mail">மின்னஞ்சல்</string>
+    <string name="internet_dialog_text">இணைய இயக்கப்படவில்லை</string>
+    <string name="hotel">ஹோட்டல்</string>
+    <string name="gov">இந்திய அரசு</string>
+    <string name="dist">தூரம்</string>
+    <string name="comment">கருத்துரைகள்</string>
+    <string name="cancel">ரத்து</string>
+    <string name="action_settings">அமைப்புகள்</string>
+    <string name="gps_dialog_text">ஜிபிஎஸ் இயக்கப்படவில்லை</string>
+    <string name="rate">மதிப்பீடுகள்</string>
+    <string name="rate_exp">உங்கள் அனுபவம் மதிப்பிடு</string>
+    <string name="setting">அமைப்புகள்</string>
 </resources>

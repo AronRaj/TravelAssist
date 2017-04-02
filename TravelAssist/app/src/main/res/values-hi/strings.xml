@@ -12,4 +12,16 @@
     <string name="no_shops_text">कोई दुकान उपलब्ध नहीं है</string>
     <string name="google_android_map_api_key"></string>
     <string name="hello_blank_fragment"></string>
+    <string name="initiative">एक डिजिटल भारत अभिनय</string>
+    <string name="open">खुला</string>
+    <string name="ministry">सड़क परिवहन और राजमार्ग मंत्रालय</string>
+    <string name="mob">मोबाइल</string>
+    <string name="mail">ईमेल</string>
+    <string name="hotel">होटल</string>
+    <string name="gov">भारत सरकार</string>
+    <string name="dist">दूरी</string>
+    <string name="comment">टिप्पणियाँ</string>
+    <string name="action_settings">सेटिंग्स</string>
+    <string name="rate">मूल्यांकन</string>
+    <string name="rate_exp">अपने अनुभव को रेट करें</string>
 </resources>
