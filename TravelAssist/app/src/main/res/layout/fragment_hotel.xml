@@ -47,12 +47,12 @@
                 android:rating="2.5"
                 android:stepSize="0.1"
                 android:theme="@style/RatingBar" />
-                <TextView
+                <!--<TextView
                     android:id="@+id/total_rated_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
-                    android:text="(60)"/>
+                    android:text="(60)"/>-->
             </LinearLayout>
 
             <TextView

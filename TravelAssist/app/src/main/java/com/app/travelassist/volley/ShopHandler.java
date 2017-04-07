@@ -68,16 +68,23 @@ public class ShopHandler extends Handler {
                                 shop.setShopId(result.getShopID());
                                 shop.setShopName(result.getShopName());
                                 shop.setShopType(result.getType());
+                                shop.setShopMobile(result.getContactNo1());
                                 String lat=result.getLatitude();
                                 String longitude=result.getLongitude();
                                 double hotelLat=Double.parseDouble(lat);
                                 double hotelLong=Double.parseDouble(longitude);
                                 shop.setShopLatitude(hotelLat);
                                 shop.setShopLongitude(hotelLong);
-                                double distance=ShopUtil.getDistance(currentLocation.getLatitude(),currentLocation.getLongitude(),hotelLat,hotelLong);
-                                shop.setDistance(distance);
+                               // double distance=ShopUtil.getDistance(currentLocation.getLatitude(),currentLocation.getLongitude(),hotelLat,hotelLong);*/
+                                if(null!=result.getDistance()) {
+                                    shop.setDistance(Double.parseDouble(result.getDistance()));
+                                }else {
+                                    shop.setDistance(0.0);
+                                }
+                                shop.setShopImageUrl(result.getImage());
                                 shop.setShopAddress(result.getAddressLine1()+result.getAddressLine2()+result.getCity()+result.getPincode());
                                 shop.setShopRating(result.getRating());
+                                shop.setShopTimings(result.getWorkingDays());
                                 List<Item> itemsList=result.getItem();
                                 if(null!=itemsList&&itemsList.size()>0){
                                     ShopUtil.addItemsList(itemsList);
@@ -86,12 +93,12 @@ public class ShopHandler extends Handler {
                             }
                             ShopUtil.addShopsList(shopsList);
                             Log.d(TAG, "Success");
-                            Intent intent=new Intent();
-                            intent.setAction(ShopInterface.ACTION_SHOP_LIST);
-                            LocalBroadcastManager.getInstance(ShopApplication.getShopContext()).sendBroadcast(intent);
                         }
                     }
                 }
+                Intent intent=new Intent();
+                intent.setAction(ShopInterface.ACTION_SHOP_LIST);
+                LocalBroadcastManager.getInstance(ShopApplication.getShopContext()).sendBroadcast(intent);
                 break;
             }
             /*case LocationInterface.HANDLE_JOURNEY_INFO: {

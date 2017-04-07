@@ -1,7 +1,11 @@
 package com.app.travelassist.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -93,8 +98,8 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         } else if (!NetworkUtil.isGPSEnabled(this)) {
             showGPSDisabledAlertToUser();
         }
-        putDummyItems();
-        new LoadDataAsync().execute();
+       // putDummyItems();
+       // new LoadDataAsync().execute();
 
     }
 
@@ -195,8 +200,12 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
 
 
     private void putDummyData() {
-        // VolleyUtil.getShopsWithLatLng(12.9611, 80.1372, "restaurant", "500");
-        List<ShopDetail> list = new ArrayList<>();
+        Location currentLocation=ShopUtil.getCurrentLocationFromDB();
+        if(null!=currentLocation) {
+           VolleyUtil.getShopsWithLatLng(currentLocation.getLatitude(), currentLocation.getLongitude(), "restaurant", "500");
+            //VolleyUtil.getShopsWithLatLng(21.1760,79.0610, "restaurant", "500");
+        }
+        /*List<ShopDetail> list = new ArrayList<>();
         ShopDetail shop1 = new ShopDetail();
         shop1.setShopId("S001");
         shop1.setShopName("A2B");
@@ -318,7 +327,7 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         list.add(shop6);
         list.add(shop7);
         list.add(shop8);
-        ShopUtil.addShopsList(list);
+        ShopUtil.addShopsList(list);*/
     }
 
     private void putDummyItems() {
@@ -334,7 +343,7 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         Item item2 = new Item();
         item2.setItemID("I002");
         item2.setItemName("Dosa");
-        item2.setItemPrice("Breakfast");
+        item2.setItemType("Breakfast");
         item2.setItemPrice("Rs.30");
         item2.setShopID("S001");
 
@@ -352,11 +361,32 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         item4.setItemPrice("Rs.25");
         item4.setShopID("S002");
 
+        Item item8 = new Item();
+        item8.setItemID("I008");
+        item8.setItemName("Butter Roti");
+        item8.setItemType("Roti");
+        item8.setItemPrice("Rs.30");
+        item8.setShopID("S002");
+
+        Item item9 = new Item();
+        item9.setItemID("I009");
+        item9.setItemName("Garlic Roti");
+        item9.setItemType("Roti");
+        item9.setItemPrice("Rs.35");
+        item9.setShopID("S002");
+
         Item item5 = new Item();
         item5.setItemID("I005");
         item5.setItemName("Panner Butter Masala");
         item5.setItemType("Veg gravy");
         item5.setItemPrice("Rs.70");
+        item5.setShopID("S002");
+
+        Item item10 = new Item();
+        item5.setItemID("I010");
+        item5.setItemName("Babycorn Manjurian");
+        item5.setItemType("Veg gravy");
+        item5.setItemPrice("Rs.90");
         item5.setShopID("S002");
 
         Item item6 = new Item();
@@ -366,12 +396,26 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         item6.setItemPrice("Rs.140");
         item6.setShopID("S002");
 
+        Item item11 = new Item();
+        item11.setItemID("I011");
+        item11.setItemName("Fish Briyani");
+        item11.setItemType("Briyani");
+        item11.setItemPrice("Rs.180");
+        item11.setShopID("S002");
+
         Item item7 = new Item();
         item7.setItemID("I007");
         item7.setItemName("Gulab Jamun");
         item7.setItemType("Dessert");
         item7.setItemPrice("Rs.50");
         item7.setShopID("S002");
+
+        Item item12 = new Item();
+        item12.setItemID("I012");
+        item12.setItemName("Jilebi");
+        item12.setItemType("Dessert");
+        item12.setItemPrice("Rs.30");
+        item12.setShopID("S002");
 
         list.add(item1);
         list.add(item2);
@@ -380,6 +424,11 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
         list.add(item5);
         list.add(item6);
         list.add(item7);
+        list.add(item8);
+        list.add(item9);
+        list.add(item10);
+        list.add(item11);
+        list.add(item12);
 
 
         ShopUtil.addItemsList(list);
@@ -405,12 +454,19 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*case R.id.lang_eng:
+            /*case R.id.action_map:
+                Fragment fragment = HotelListMapFragment.newInstance();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.animator.slide_left_enter, R.animator.slide_left_exit,R.animator.slide_right_enter,R.animator.slide_right_exit);
+                fragmentTransaction.replace(R.id.content_frame, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
                 break;
-            case R.id.lang_hindi:
-                break;
-            case R.id.lang_tamil:
+            case R.id.action_list:
                 break;*/
+            case R.id.action_settings:
+                break;
             default:
                 break;
         }
@@ -421,12 +477,12 @@ public class ShopsListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
-            case R.id.near:{
+        switch (id) {
+            case R.id.near: {
                 break;
             }
-            case R.id.trip:{
-                Intent intent =new Intent(this,TripPlanActivity.class);
+            case R.id.trip: {
+                Intent intent = new Intent(this, TripPlanActivity.class);
                 startActivity(intent);
                 break;
             }

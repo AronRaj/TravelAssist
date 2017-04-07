@@ -61,6 +61,7 @@ public class ShopUtil {
             shopInfo.setShopLongitude((lCursor.getDouble(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_LONGITUDE))));
             shopInfo.setShopMobile((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE))));
             shopInfo.setShopImageUrl((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL))));
+            shopInfo.setShopTimings((lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_TIMINGS))));
         }
         return shopInfo;
     }
@@ -85,6 +86,7 @@ public class ShopUtil {
                     data.setShopRating(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_RATING)));
                     data.setShopStatus(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_STATUS)));
                     data.setShopImageUrl(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL)));
+                    data.setShopTimings(lCursor.getString(lCursor.getColumnIndex(ShopProvider.SHOP_COLUMNS.SHOP_TIMINGS)));
                     shopsList.add(data);
                 }
             } catch (Exception e) {
@@ -116,6 +118,7 @@ public class ShopUtil {
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_MOBILE, shop.getShopMobile());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_ADDRESS, shop.getShopAddress());
             lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_IMAGE_URL, shop.getShopImageUrl());
+            lShopContentValue.put(ShopProvider.SHOP_COLUMNS.SHOP_TIMINGS, shop.getShopTimings());
             int count = ShopApplication.getShopContext().getContentResolver().update(ShopProvider.CONTENT_URI_SHOP_TABLE, lShopContentValue, lSelection, lSelectionArg);
                 Log.d(TAG, "addShopsList() :: CONTENT_URI_SHOP_TABLE rows count " + count);
             if (count == 0) {
@@ -155,15 +158,18 @@ public class ShopUtil {
         return categoriesList;
     }
 
-    public static List<String> getItemsForShop(String shopId,String category){
+    public static ArrayList<Item> getItemsForShop(String shopId,String category){
         Cursor lCursor = null;
-        List<String> itemsList=new ArrayList<>();
+        ArrayList<Item> itemsList=new ArrayList<>();
         String selection = ShopProvider.MENU_ITEM_COLUMNS.SHOP_ID + " = ? AND "+ ShopProvider.MENU_ITEM_COLUMNS.ITEM_CATEGORY + " = ?";
         String[] selectionArg = new String[]{shopId,category};
 
         lCursor = ShopApplication.getShopContext().getContentResolver().query(ShopProvider.CONTENT_URI_MENU_ITEM_TABLE, null, selection, selectionArg, null);
         while (null!=lCursor&&lCursor.moveToNext()){
-            itemsList.add(lCursor.getString(lCursor.getColumnIndex(ShopProvider.MENU_ITEM_COLUMNS.ITEM_NAME)));
+            Item item=new Item();
+            item.setItemName(lCursor.getString(lCursor.getColumnIndex(ShopProvider.MENU_ITEM_COLUMNS.ITEM_NAME)));
+            item.setItemPrice(lCursor.getString(lCursor.getColumnIndex(ShopProvider.MENU_ITEM_COLUMNS.ITEM_PRICE)));
+            itemsList.add(item);
         }
         return itemsList;
     }

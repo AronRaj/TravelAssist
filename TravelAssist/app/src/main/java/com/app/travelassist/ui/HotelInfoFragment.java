@@ -3,6 +3,9 @@ package com.app.travelassist.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.travelassist.R;
 import com.app.travelassist.database.ShopUtil;
+import com.app.travelassist.model.HotelTime;
 import com.app.travelassist.model.ShopDetail;
+import com.app.travelassist.util.OperationTimeAdapter;
 import com.app.travelassist.volley.VolleyUtil;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,13 +43,16 @@ public class HotelInfoFragment extends Fragment {
     private View mRootView;
 
     private TextView mShopMobile;
-    private TextView mShopEmail;
+  //  private TextView mShopEmail;
     private TextView mShopRatingText;
-    private TextView mShopTotalRated;
+    //private TextView mShopTotalRated;
     private RatingBar mShopRatingBar;
     private RatingBar mShopCustomerRatingBar;
     private EditText mShopCustomerComments;
     private Button mRatingSubmitButton;
+    private RecyclerView mTimeView;
+    private OperationTimeAdapter adapter;
+    List<HotelTime> timeList;
 
 
     public HotelInfoFragment() {
@@ -64,8 +80,13 @@ public class HotelInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_hotel_info, container, false);
         mShopMobile = (TextView) mRootView.findViewById(R.id.mobilenumber);
-        mShopEmail = (TextView) mRootView.findViewById(R.id.email);
-        mShopTotalRated = (TextView) mRootView.findViewById(R.id.total_ratings);
+       // mShopEmail = (TextView) mRootView.findViewById(R.id.email);
+        //mShopTotalRated = (TextView) mRootView.findViewById(R.id.total_ratings);
+        mTimeView=(RecyclerView)mRootView.findViewById(R.id.time_list);
+        mTimeView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        mTimeView.setLayoutManager(llm);
+        timeList = new ArrayList<HotelTime>();
         mShopRatingText = (TextView) mRootView.findViewById(R.id.shop_rating);
         mShopRatingBar = (RatingBar) mRootView.findViewById(R.id.shop_rating_bar);
         mShopCustomerRatingBar = (RatingBar) mRootView.findViewById(R.id.customer_rating_bar_shop);
@@ -77,6 +98,9 @@ public class HotelInfoFragment extends Fragment {
                 float customerRating=mShopCustomerRatingBar.getRating();
                 String customerComments=mShopCustomerComments.getText().toString();
                 VolleyUtil.submitShopRating(shopId,customerRating,customerComments);
+                Toast.makeText(getActivity(),"Thanks for your submission",Toast.LENGTH_SHORT).show();
+                mShopCustomerRatingBar.setRating(0.0f);
+                mShopCustomerComments.setText("");
             }
         });
         populateShopData();
@@ -86,11 +110,38 @@ public class HotelInfoFragment extends Fragment {
     private void populateShopData() {
         ShopDetail shop = ShopUtil.getShopInfo(shopId);
         if (null != shop) {
+            try {
+                JSONArray timeArray = new JSONArray(shop.getShopTimings());
+                timeList=new ArrayList<>();
+                if(null!=timeArray&&timeArray.length()>0){
+                    for(int i=0;i<timeArray.length();i++) {
+                        JSONObject data = timeArray.getJSONObject(i);
+                        HotelTime timeData=new HotelTime();
+                        if(null!=data){
+                            if(data.has("day")) {
+                                timeData.setDay(data.get("day").toString());
+                            }
+                            if(data.has("from")) {
+                                timeData.setFromTime(data.get("from").toString());
+                            }if(data.has("to")) {
+                                timeData.setToTime(data.get("to").toString());
+                            }
+                            timeList.add(timeData);
+                        }
+                    }
+                }
+            }catch (JSONException je){
+                Log.e(TAG,"Json Exception",je);
+            }catch (Exception e){
+                Log.e(TAG,"Json Exception",e);
+            }
             mShopMobile.setText(shop.getShopMobile());
-            mShopTotalRated.setText(shop.getShopTotalRated()+" Ratings");
+           // mShopTotalRated.setText(shop.getShopTotalRated()+" Ratings");
             mShopRatingText.setText(shop.getShopRating());
             mShopRatingBar.setRating(Float.parseFloat(shop.getShopRating()));
         }
+        adapter=new OperationTimeAdapter(getActivity(),getActivity().getApplicationContext(),timeList);
+        mTimeView.setAdapter(adapter);
 
     }
 

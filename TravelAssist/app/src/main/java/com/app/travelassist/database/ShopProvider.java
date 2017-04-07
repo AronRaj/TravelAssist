@@ -51,6 +51,7 @@ public class ShopProvider extends ContentProvider {
         String SHOP_ADDRESS = "shop_address";
         String SHOP_MOBILE = "shop_mobile";
         String SHOP_IMAGE_URL = "shop_image_url";
+        String SHOP_TIMINGS = "shop_timings";
         String SHOP_INFO_PROCESSED = "shop_info_processed";
         int SHOP_LOCATION_UN_PROCESSED = 0;
         int SHOP_LOCATION_PROCESSED = 1;
@@ -80,7 +81,7 @@ public class ShopProvider extends ContentProvider {
             + TABLE_SHOP + "("
             + SHOP_COLUMNS.SHOP_ID + " TEXT PRIMARY KEY ," + SHOP_COLUMNS.SHOP_NAME + " TEXT," +
             SHOP_COLUMNS.SHOP_TYPE + " TEXT," + SHOP_COLUMNS.SHOP_CUISINE + " TEXT," + SHOP_COLUMNS.SHOP_RATING + " TEXT," + SHOP_COLUMNS.SHOP_TOTAL_RATED + " TEXT," +
-            SHOP_COLUMNS.SHOP_LATITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_LONGITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," + SHOP_COLUMNS.SHOP_IMAGE_URL + " TEXT," +
+            SHOP_COLUMNS.SHOP_LATITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_LONGITUDE + " DOUBLE," + SHOP_COLUMNS.SHOP_ADDRESS + " TEXT," + SHOP_COLUMNS.SHOP_IMAGE_URL + " TEXT," +SHOP_COLUMNS.SHOP_TIMINGS + " TEXT," +
             SHOP_COLUMNS.SHOP_MOBILE + " TEXT,"+SHOP_COLUMNS.SHOP_STATUS + " TEXT,"+SHOP_COLUMNS.SHOP_DISTANCE + " INTEGER," + SHOP_COLUMNS.SHOP_INFO_PROCESSED + " INTEGER DEFAULT 0)";
 
     private static final String CREATE_MENU_ITEM_TABLE = "CREATE TABLE IF NOT EXISTS "

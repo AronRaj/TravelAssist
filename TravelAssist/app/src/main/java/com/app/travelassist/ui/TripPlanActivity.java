@@ -3,6 +3,7 @@ package com.app.travelassist.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -28,7 +29,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -88,7 +88,8 @@ public class TripPlanActivity extends AppCompatActivity implements NavigationVie
                 googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(12.9911, 77.6878);
+                Location current=ShopUtil.getCurrentLocationFromDB();
+                LatLng sydney = new LatLng(current.getLatitude(), current.getLongitude());
                 googleMap.addMarker(new MarkerOptions().position(sydney).title("Tandoori Chowk").draggable(true).snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
@@ -97,12 +98,12 @@ public class TripPlanActivity extends AppCompatActivity implements NavigationVie
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng latLng) {
-                        populateShopsOnMap();
                         googleMap.clear();
-                        googleMap.addMarker(new MarkerOptions().position(latLng).title("MyLocation").draggable(true).snippet("Marker Description"));
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(getString(R.string.my_location_text)).draggable(true).snippet(getString(R.string.drag_marker_text)));
                         // For zooming automatically to the location of the marker
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(15).build();
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        populateShopsOnMap();
                     }
                 });
             }
@@ -145,34 +146,36 @@ public class TripPlanActivity extends AppCompatActivity implements NavigationVie
 
     private void populateShopsOnMap() {
         shopsList = ShopUtil.getShopsList();
-        if(null !=shopsList){
-            for(ShopDetail shop:shopsList){
-                    LatLng ll = new LatLng(shop.getShopLatitude(), shop.getShopLongitude());
-                    BitmapDescriptor bitmapMarker=null;
-                    switch (shop.getShopType()) {
-                        case "Restaurant":
-                            bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                            Log.i(TAG, "RED");
-                            break;
-                        case "Grocery":
-                            bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-                            Log.i(TAG, "GREEN");
-                            break;
+        if (null != shopsList) {
+            for (ShopDetail shop : shopsList) {
+                LatLng ll = new LatLng(shop.getShopLatitude(), shop.getShopLongitude());
+                //drawMarker(ll);
+                BitmapDescriptor bitmapMarker = null;
+                switch (shop.getShopType()) {
+                    case "Restaurant":
+                        bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                        Log.i(TAG, "RED");
+                        break;
+                    case "Grocery":
+                        bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                        Log.i(TAG, "GREEN");
+                        break;
                         /*case 2:
                             bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
                             Log.i(TAG, "ORANGE");
-                            break;
-                        default:
-                            bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
-                            Log.i(TAG, "DEFAULT");
                             break;*/
-                    }
-                    googleMap.addMarker(new MarkerOptions().position(ll).title(shop.getShopName())
-                            .snippet(shop.getShopStatus()).icon(bitmapMarker));
-
-                    Log.i(TAG,"Shop  "+shop.getShopName()+"  was added ");
+                        default:
+                            bitmapMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE);
+                            Log.i(TAG, "DEFAULT");
+                            break;
                 }
-            }
+                googleMap.addMarker(new MarkerOptions().position(ll).title(shop.getShopName())
+                        .snippet("Rating : "+shop.getShopRating()).icon(bitmapMarker));
 
+                Log.i(TAG, "Shop  " + shop.getShopName() + "  was added ");
+            }
         }
+
     }
+
+}

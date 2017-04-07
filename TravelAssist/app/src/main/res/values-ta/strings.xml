@@ -17,6 +17,8 @@
     <string name="comment">கருத்துரைகள்</string>
     <string name="cancel">ரத்து</string>
     <string name="action_settings">அமைப்புகள்</string>
+    <string name="action_map">வரைபடம்</string>
+    <string name="action_list">பட்டியல்</string>
     <string name="gps_dialog_text">ஜிபிஎஸ் இயக்கப்படவில்லை</string>
     <string name="rate">மதிப்பீடுகள்</string>
     <string name="rate_exp">உங்கள் அனுபவம் மதிப்பிடு</string>

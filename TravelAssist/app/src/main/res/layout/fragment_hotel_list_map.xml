@@ -1,0 +1,14 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/white_bg"
+    android:clickable="true"
+    tools:context="com.app.travelassist.ui.HotelListMapFragment">
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapListView"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

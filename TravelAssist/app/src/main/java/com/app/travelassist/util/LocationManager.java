@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.app.travelassist.app.ShopApplication;
 import com.app.travelassist.database.ShopUtil;
+import com.app.travelassist.volley.VolleyUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -119,6 +120,10 @@ public class LocationManager extends IntentService implements GoogleApiClient.Co
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged :: " + location.toString());
         ShopUtil.updateCurrentLocation(location);
+        if(null!=location) {
+            VolleyUtil.getShopsWithLatLng(location.getLatitude(), location.getLongitude(), "restaurant", "500");
+            //VolleyUtil.getShopsWithLatLng(21.1760,79.0610, "restaurant", "500");
+        }
     }
 
     /*private void getAddressInfo(Location location){

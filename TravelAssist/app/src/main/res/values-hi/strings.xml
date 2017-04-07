@@ -22,6 +22,8 @@
     <string name="dist">दूरी</string>
     <string name="comment">टिप्पणियाँ</string>
     <string name="action_settings">सेटिंग्स</string>
+    <string name="action_map">नक्शा</string>
+    <string name="action_list">सूची</string>
     <string name="rate">मूल्यांकन</string>
     <string name="rate_exp">अपने अनुभव को रेट करें</string>
 </resources>

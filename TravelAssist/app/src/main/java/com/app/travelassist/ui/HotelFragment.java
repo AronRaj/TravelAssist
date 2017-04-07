@@ -35,7 +35,7 @@ public class HotelFragment extends Fragment {
     private View mRootView;
     private ImageView hotelImage;
     private RatingBar hotelRating;
-    private TextView mShopTotalRatings;
+   // private TextView mShopTotalRatings;
     private TextView hotelName;
     private TextView hotelCuisine;
     private TextView hotelMapText;
@@ -78,7 +78,7 @@ public class HotelFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_hotel, container, false);
         hotelImage = (ImageView) mRootView.findViewById(R.id.hotel_image);
-        mShopTotalRatings = (TextView) mRootView.findViewById(R.id.total_rated_count);
+       // mShopTotalRatings = (TextView) mRootView.findViewById(R.id.total_rated_count);
         hotelName = (TextView) mRootView.findViewById(R.id.hotel_name);
         hotelCuisine = (TextView) mRootView.findViewById(R.id.hotel_cuisine);
         hotelMapText = (TextView) mRootView.findViewById(R.id.hotel_map_text);
@@ -148,7 +148,7 @@ public class HotelFragment extends Fragment {
             }
             hotelCuisine.setText(shop.getShopCuisine());
             hotelRating.setRating(Float.parseFloat(shop.getShopRating()));
-            mShopTotalRatings.setText("("+shop.getShopTotalRated()+")");
+           // mShopTotalRatings.setText("("+shop.getShopTotalRated()+")");
             Picasso.with(getActivity()).load(shop.getShopImageUrl()).into(hotelImage);
         }
         }

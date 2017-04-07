@@ -5,22 +5,13 @@
     android:layout_height="match_parent"
     android:background="@mipmap/app_bg">
 
-    <!--<ImageView
-        android:id="@+id/logo"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/gov"/>-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="1">
+
 
         <LinearLayout
+            android:id="@+id/app_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5">
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
 
             <TextView
                 android:id="@+id/app_banner_text"
@@ -35,9 +26,10 @@
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="0.5">
+            android:layout_below="@id/app_name"
+            android:layout_marginTop="100dp">
         <customfonts.MyTextView
             android:id="@+id/digital_india"
             android:layout_width="match_parent"
@@ -67,6 +59,5 @@
             android:textColor="@color/color_white"
             android:textSize="15sp" />
         </LinearLayout>
-    </LinearLayout>
 
 </RelativeLayout>

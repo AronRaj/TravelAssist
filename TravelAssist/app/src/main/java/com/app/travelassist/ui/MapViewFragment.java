@@ -95,7 +95,7 @@ public class MapViewFragment extends Fragment {
                 googleMap.addMarker(new MarkerOptions().position(sydney).title(shopName).snippet("Marker Description"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(19).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(16).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             }
         });

@@ -23,6 +23,9 @@ public class ShopData {
     private String pincode;
     private String distance;
     private List<Item> item;
+    private String contactNo1;
+    private String contactNo2;
+    private String workingDays;
 
     public String getShopID() {
         return shopID;
@@ -150,5 +153,29 @@ public class ShopData {
 
     public void setItem(List<Item> item) {
         this.item = item;
+    }
+
+    public String getContactNo1() {
+        return contactNo1;
+    }
+
+    public void setContactNo1(String contactNo1) {
+        this.contactNo1 = contactNo1;
+    }
+
+    public String getContactNo2() {
+        return contactNo2;
+    }
+
+    public void setContactNo2(String contactNo2) {
+        this.contactNo2 = contactNo2;
+    }
+
+    public String getWorkingDays() {
+        return workingDays;
+    }
+
+    public void setWorkingDays(String workingDays) {
+        this.workingDays = workingDays;
     }
 }

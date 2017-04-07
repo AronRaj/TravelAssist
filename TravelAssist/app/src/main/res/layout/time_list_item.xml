@@ -27,28 +27,37 @@
 
 
             <TextView
-                android:id="@+id/item_name"
+                android:id="@+id/day"
                 android:layout_weight="0.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Idly"
+                android:text="Monday"
                 android:gravity="left"
-                android:layout_marginLeft="20dp"
                 android:textColor="@color/shop_name_color"
                 android:textSize="15sp" />
 
                 <TextView
                     android:layout_weight="0.5"
-                    android:id="@+id/item_price"
+                    android:id="@+id/from_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Rs.20"
+                    android:text="From : 12.0"
                     android:gravity="right"
-                    android:layout_marginRight="30dp"
                     android:textColor="@color/shop_name_color"
                     android:textSize="15sp" />
+            <TextView
+                android:layout_weight="0.5"
+                android:id="@+id/to_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="To : 4.00"
+                android:gravity="right"
+                android:layout_marginRight="30dp"
+                android:textColor="@color/shop_name_color"
+                android:textSize="15sp" />
 
         </LinearLayout>
         <!--<View

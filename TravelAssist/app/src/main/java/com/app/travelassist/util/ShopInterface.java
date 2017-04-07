@@ -24,6 +24,6 @@ public interface ShopInterface {
     int FASTEST_INTERVAL=5000;
     float MINIMUM_DISPLACEMENT=100.0f;
 
-    public static final String ACTION_SHOP_LIST = "com.android.action.SHOP_LIST";
+    String ACTION_SHOP_LIST = "com.android.action.SHOP_LIST";
 
 }

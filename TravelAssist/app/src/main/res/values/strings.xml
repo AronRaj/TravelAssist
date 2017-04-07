@@ -11,6 +11,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="action_map">Map</string>
+    <string name="action_list">List</string>
     <string name="gps_dialog_text">GPS is not enabled</string>
     <string name="internet_dialog_text">Internet is not enabled</string>
     <string name="setting">Settings</string>
@@ -18,9 +20,11 @@
     <string name="map_view_text">Map View</string>
     <string name="info_text">Info</string>
     <string name="no_shops_text">No shops available</string>
+    <string name="my_location_text">My Location</string>
+    <string name="drag_marker_text">Drag marker to locate</string>
     <string name="title_activity_trip_plan">TripPlanActivity</string>
     <string name="initiative">A Digital India Intiative</string>
-<string name="gov">Government of India</string>
+    <string name="gov">Government of India</string>
     <string name="mob">Mobile</string>
     <string name="mail">Email</string>
     <string name="rate">Ratings</string>
